@@ -5,7 +5,7 @@
 #include "esphome/components/uart/uart.h"
 
 #define MESSAGE_REPETITIONS 5
-#define POWER_TRIP_DELAY 2000
+#define POWER_TRIP_DELAY 5000
 
 namespace esphome
 {
