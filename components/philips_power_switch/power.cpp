@@ -51,6 +51,12 @@ namespace esphome
                     power_pin_->digital_write(!power_pin_->digital_read());
                     delay(power_trip_delay_);
                     power_pin_->digital_write(!power_pin_->digital_read());
+=======
+                    ESP_LOGE(TAG, "TRANSISTOR!");
+                    power_pin_->digital_write(0);
+                    ESP_LOGE(TAG, "DISPLAY OFF (1s)!");
+                    delay(POWER_TRIP_DELAY);
+                    power_pin_->digital_write(1);
                     ESP_LOGE(TAG, "DISPLAY ON!");
 
                 }
