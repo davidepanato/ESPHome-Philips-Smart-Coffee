@@ -49,8 +49,7 @@ namespace esphome
                     // Perform power trip (invert state twice)
                     ESP_LOGE(TAG, "TRANSISTOR!");
                     power_pin_->digital_write(!power_pin_->digital_read());
-                    ESP_LOGE(TAG, "DISPLAY OFF (0.5s)!");
-                    delay(POWER_TRIP_DELAY);
+                    delay(power_trip_delay_);
                     power_pin_->digital_write(!power_pin_->digital_read());
                     ESP_LOGE(TAG, "DISPLAY ON!");
 
