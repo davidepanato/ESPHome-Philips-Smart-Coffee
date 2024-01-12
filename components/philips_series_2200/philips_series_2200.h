@@ -112,6 +112,7 @@ namespace esphome
 
         private:
             long last_message_from_mainboard_time_ = 0;
+            long last_message_from_display_time_ = 0;
 
             /// @brief reference to uart connected to the display unit
             uart::UARTDevice display_uart_;
@@ -125,8 +126,8 @@ namespace esphome
             /// @brief indicates if the power pin should be inverted
             bool invert_ = false;
 
-            /// @brief length of poweroutage applied to the display
-            uint32_t power_trip_delay_ = 1000;
+            /// @brief length of power outage applied to the display
+            uint32_t power_trip_delay_ = 500;
 
             /// @brief power switch reference
             std::vector<philips_power_switch::Power *> power_switches_;
