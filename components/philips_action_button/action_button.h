@@ -4,7 +4,7 @@
 #include "esphome/components/button/button.h"
 #include "esphome/components/uart/uart.h"
 
-#define MESSAGE_REPETITIONS 5
+#define MESSAGE_REPETITIONS 24
 #define BUTTON_SEQUENCE_DELAY 100
 
 namespace esphome
