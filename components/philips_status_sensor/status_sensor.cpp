@@ -26,6 +26,17 @@ namespace esphome
 
                 // TODO: figure out how the checksum is calculated and only parse valid messages
 
+                // Check if the data has changed
+                if (hasDataChanged(data, len))
+                {
+                    // Print the new data using ESP_LOGE
+                    ESP_LOGE(TAG, "Data changed:");
+                    printData(data, len);
+
+                    // Update the previous data
+                    updatePreviousData(data, len);
+                }
+
                 // Check if the play/pause button is on/off/blinking
                 if ((data[16] == 0x07) != play_pause_led_)
                 {
@@ -156,7 +167,28 @@ namespace esphome
                     return;
                 }
             }
+        private:
+            bool hasDataChanged(uint8_t *data, size_t len)
+            {
+                // Compare the new data with the previous data
+                return memcmp(data, previousData, len) != 0;
+            }
 
+            void updatePreviousData(uint8_t *data, size_t len)
+            {
+                // Update the previous data with the new data
+                memcpy(previousData, data, len);
+            }
+
+            void printData(uint8_t *data, size_t len)
+            {
+                // Print the data using ESP_LOGE (customize this based on your data format)
+                ESP_LOGE(TAG, "Printing data:");
+                for (size_t i = 0; i < len; i++)
+                {
+                    ESP_LOGE(TAG, "%02X ", data[i]);
+                }
+            }
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
 } // namespace esphome
