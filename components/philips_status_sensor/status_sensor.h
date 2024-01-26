@@ -87,6 +87,14 @@ namespace esphome
 
                 /// @brief time of play/pause change
                 long play_pause_last_change_ = 0;
+                
+                uint8_t previousData[24]; // Assuming MAX_DATA_SIZE is a suitable size for your data
+
+                bool hasDataChanged(uint8_t *data, size_t len);
+
+                void updatePreviousData(uint8_t *data, size_t len);
+
+                void printData(uint8_t *data, size_t len);
             };
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
