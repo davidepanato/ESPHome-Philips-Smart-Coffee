@@ -166,32 +166,30 @@ namespace esphome
                     }
                     return;
                 }
+            }
 
-            private:
-                uint8_t previousData[24]; // Assuming MAX_DATA_SIZE is a suitable size for your data
+            bool StatusSensor::hasDataChanged(uint8_t *data, size_t len)
+            {
+                // Compare the new data with the previous data
+                return memcmp(data, previousData, len) != 0;
+            }
 
-                bool hasDataChanged(uint8_t *data, size_t len)
+            void StatusSensor::updatePreviousData(uint8_t *data, size_t len)
+            {
+                // Update the previous data with the new data
+                memcpy(previousData, data, len);
+            }
+
+            void StatusSensor::printData(uint8_t *data, size_t len)
+            {
+                // Print the data using ESP_LOGE (customize this based on your data format)
+                ESP_LOGE(TAG, "Printing data:");
+                for (size_t i = 0; i < len; i++)
                 {
-                    // Compare the new data with the previous data
-                    return memcmp(data, previousData, len) != 0;
-                }
-
-                void updatePreviousData(uint8_t *data, size_t len)
-                {
-                    // Update the previous data with the new data
-                    memcpy(previousData, data, len);
-                }
-
-                void printData(uint8_t *data, size_t len)
-                {
-                    // Print the data using ESP_LOGE (customize this based on your data format)
-                    ESP_LOGE(TAG, "Printing data:");
-                    for (size_t i = 0; i < len; i++)
-                    {
-                        ESP_LOGE(TAG, "%02X ", data[i]);
-                    }
+                    ESP_LOGE(TAG, "%02X ", data[i]);
                 }
             }
+
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
 } // namespace esphome
