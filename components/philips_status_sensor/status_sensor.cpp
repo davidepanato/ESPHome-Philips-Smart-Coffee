@@ -155,9 +155,8 @@ namespace esphome
                     }
                     return;
                 }
-
             }
-            
+
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
 } // namespace esphome
