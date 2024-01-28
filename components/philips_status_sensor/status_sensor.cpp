@@ -26,17 +26,6 @@ namespace esphome
 
                 // TODO: figure out how the checksum is calculated and only parse valid messages
 
-                // Check if the data has changed
-                if (hasDataChanged(data, len))
-                {
-                    // Print the new data using ESP_LOGE
-                    ESP_LOGE(TAG, "Data changed:");
-                    printData(data, len);
-
-                    // Update the previous data
-                    updatePreviousData(data, len);
-                }
-
                 // Check if the play/pause button is on/off/blinking
                 if ((data[16] == 0x07) != play_pause_led_)
                 {
@@ -168,6 +157,7 @@ namespace esphome
                 }
 
             }
+            
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
 } // namespace esphome

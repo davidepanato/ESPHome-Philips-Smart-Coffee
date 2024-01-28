@@ -87,7 +87,6 @@ namespace esphome
 
                 /// @brief time of play/pause change
                 long play_pause_last_change_ = 0;
-                
             };
         } // namespace philips_status_sensor
     }     // namespace philips_series_2200
