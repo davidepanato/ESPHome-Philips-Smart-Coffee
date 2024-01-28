@@ -4,7 +4,7 @@
 #include "esphome/components/button/button.h"
 #include "esphome/components/uart/uart.h"
 
-#define MESSAGE_REPETITIONS 5
+#define MESSAGE_REPETITIONS 25
 #define BUTTON_SEQUENCE_DELAY 100
 #define LONG_PRESS_REPETITION_DELAY 50
 #define LONG_PRESS_DURATION 3500

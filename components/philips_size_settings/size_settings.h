@@ -5,7 +5,7 @@
 #include "esphome/components/uart/uart.h"
 #include "../philips_status_sensor/status_sensor.h"
 
-#define MESSAGE_REPETITIONS 5
+#define MESSAGE_REPETITIONS 25
 #define SETTINGS_BUTTON_SEQUENCE_DELAY 500
 
 namespace esphome
