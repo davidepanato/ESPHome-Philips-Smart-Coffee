@@ -22,6 +22,7 @@ A example configuration can be found [here](example.yaml)
 - **power_pin**(**Required**, [Pin](https://esphome.io/guides/configuration-types.html#config-pin)): Pin to which the MOSFET/Transistor is connected. This pin is used to temporarily turn of the display unit.
 - **invert_power_pin**(**Optional**: boolean): If set to `true` the output of the power pin will be inverted. Defaults to `false`.
 - **power_trip_delay**(**Optional**: Time): Determines the length of the power outage applied to the display unit, which is to trick it into turning on. Defaults to `500ms`.
+- **model**(**Optional**: int): Different models or revisions may use different commands. This option can be used to specify the command set used by this component. Select one of `EP2220`. Defaults to `EP2220`.
 
 ## Philips Power switch
 
@@ -29,7 +30,7 @@ A example configuration can be found [here](example.yaml)
 - **clean**(**Optional**: boolean): If set to `true` the machine will perform a cleaning cycle during startup. Otherwise the machine will power on without cleaning. Defaults to `true`.
 - All other options from [Switch](https://esphome.io/components/switch/index.html#config-switch)
 
-## Philips Action Button
+## Action Button
 
 - **controller_id**(**Required**, string): The Philips Series 2200-Controller to which this entity belongs
 - **action**(**Required**, int): The action performed by this button. Select one of `MAKE_COFFEE`, `SELECT_COFFEE`, `SELECT_ESPRESSO`, `MAKE_ESPRESSO`, `SELECT_HOT_WATER`, `MAKE_HOT_WATER`, `SELECT_STEAM`, `MAKE_STEAM`, `BEAN`, `SIZE`, `AQUA_CLEAN`, `CALC_CLEAN`, `PLAY_PAUSE`.
@@ -42,18 +43,12 @@ A example configuration can be found [here](example.yaml)
 - All other options from [Text Sensor](https://esphome.io/components/text_sensor/index.html#config-text-sensor)
 - **use_cappuccino**(**Optional**, boolean): If set to `true`, `Cappuccino selected` will be reported instead of `Steam selected`. This option is intended for machines like the EP2230 which can make cappuccino. Default to `false`.
 
-## Bean Settings
+## Bean and Size Settings
 
+- **type**(**Required**, string): The type of this number component. One of `size` and `bean`. If `size` is selected, this component will report/manipulate the beverage size. If `bean` is used, this component will report/manipulate the beverage strength.
 - **controller_id**(**Required**, string): The Philips Series 2200-Controller to which this entity belongs
 - **status_sensor_id**(**Required**, string): Id of a status sensor which is also connected to the controller.
-- **source**(**Required**, int): The source of this sensor. Select one of `COFFEE`, `ESPRESSO`, `CAPPUCCINO`. When selecting `CAPPUCCINO` the related status sensor must use `use_cappuccino = true`.
-- All other options from [Number](https://esphome.io/components/number/index.html#config-number)
-
-## Size Settings
-
-- **controller_id**(**Required**, string): The Philips Series 2200-Controller to which this entity belongs
-- **status_sensor_id**(**Required**, string): Id of a status sensor which is also connected to the controller.
-- **source**(**Required**, int): The source of this sensor. Select one of `COFFEE`, `ESPRESSO`, `CAPPUCCINO`, `HOT_WATER`. When selecting `CAPPUCCINO` the related status sensor must use `use_cappuccino = true`.
+- **source**(**Optional**, int): The source of this sensor. If non is provided, any selected beverage will enable this component. Select one of `COFFEE`, `ESPRESSO`, `CAPPUCCINO`, `HOT_WATER`(only for size). When selecting `CAPPUCCINO` the related status sensor must use `use_cappuccino = true`.
 - All other options from [Number](https://esphome.io/components/number/index.html#config-number)
 
 # Fully automated coffee
@@ -72,7 +67,7 @@ script:
     then:
       - if:
           condition:
-            lambda: 'return id(status).state == "OFF";'
+            lambda: 'return id(status).state == "Off";'
           then:
             - switch.turn_on: power
             - wait_until:

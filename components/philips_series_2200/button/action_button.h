@@ -3,8 +3,9 @@
 #include "esphome/core/component.h"
 #include "esphome/components/button/button.h"
 #include "esphome/components/uart/uart.h"
+#include "../commands.h"
 
-#define MESSAGE_REPETITIONS 25
+#define MESSAGE_REPETITIONS 5
 #define BUTTON_SEQUENCE_DELAY 100
 #define LONG_PRESS_REPETITION_DELAY 50
 #define LONG_PRESS_DURATION 3500
@@ -116,9 +117,9 @@ namespace esphome
                 /// @brief true if the component is currently performing a long press
                 bool is_long_pressing_ = false;
                 /// @brief time at which the button press was started
-                long press_start_ = -(LONG_PRESS_DURATION + 1);
+                uint32_t press_start_ = -(LONG_PRESS_DURATION + 1);
                 /// @brief time at which the last message was sent
-                long last_message_sent_ = 0;
+                uint32_t last_message_sent_ = 0;
             };
         } // namespace philips_action_button
     }     // namespace philips_series_2200
