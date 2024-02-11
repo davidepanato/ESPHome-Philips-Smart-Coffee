@@ -3,6 +3,7 @@
 #include "esphome/core/component.h"
 #include "esphome/components/switch/switch.h"
 #include "esphome/components/uart/uart.h"
+#include "../commands.h"
 
 #define MESSAGE_REPETITIONS 25
 #define POWER_TRIP_RETRY_DELAY 500
@@ -99,7 +100,7 @@ namespace esphome
                 /// @brief Determines wether a power trip should be performed
                 bool should_power_trip_ = false;
                 /// @brief Time of last power trip
-                long last_power_trip_ = 0;
+                uint32_t last_power_trip_ = 0;
                 /// @brief nr of power performed power trips
                 int power_trip_count_ = 0;
                 /// @brief initial power state reference
