@@ -46,7 +46,7 @@ namespace esphome
                 if (!long_pressing)
                     mainboard_uart_.write_array(buffer, size);
                     if (size != previous_buffer_size || memcmp(buffer, previous_buffer, size) != 0) {
-                        ESP_LOGD(TAG, "DM: %.*s", hexencode(buffer, size).c_str());
+                        ESP_LOGD(TAG, "DM: %.*s", format_hex_pretty(buffer, size).c_str());
                         memcpy(previous_buffer, buffer, size);
                         previous_buffer_size = size;
                     }
@@ -69,7 +69,7 @@ namespace esphome
                 mainboard_uart_.read_array(buffer, size);
 
                 if (size != previous_buffer_size || memcmp(buffer, previous_buffer, size) != 0) {
-                    ESP_LOGD(TAG, "MD %.*s", hexencode(buffer, size).c_str());
+                    ESP_LOGD(TAG, "MD %.*s", format_hex_pretty(buffer, size).c_str());
                     memcpy(previous_buffer, buffer, size);
                     previous_buffer_size = size;
                 }
