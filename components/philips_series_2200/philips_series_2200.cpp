@@ -20,6 +20,8 @@ namespace esphome
         void PhilipsSeries2200::loop()
         {
             uint8_t buffer[BUFFER_SIZE];
+            static uint8_t previous_buffer[BUFFER_SIZE];
+            static uint8_t previous_buffer_size = 0;
 
             // Pipe display to mainboard
             if (display_uart_.available())
@@ -43,6 +45,11 @@ namespace esphome
                 // Drop messages if button long-press is currently injecting messages
                 if (!long_pressing)
                     mainboard_uart_.write_array(buffer, size);
+                    if (size != previous_buffer_size || memcmp(buffer, previous_buffer, size) != 0) {
+                        ESP_LOGD(TAG, "Display to mainboard: %.*s", size, buffer);
+                        memcpy(previous_buffer, buffer, size);
+                        previous_buffer_size = size;
+                    }
                 last_message_from_display_time_ = millis();
             }
 
@@ -61,6 +68,11 @@ namespace esphome
                 uint8_t size = std::min(mainboard_uart_.available(), BUFFER_SIZE);
                 mainboard_uart_.read_array(buffer, size);
 
+                if (size != previous_buffer_size || memcmp(buffer, previous_buffer, size) != 0) {
+                    ESP_LOGD(TAG, "Mainboard to display: %.*s", size, buffer);
+                    memcpy(previous_buffer, buffer, size);
+                    previous_buffer_size = size;
+                }
                 display_uart_.write_array(buffer, size);
 
                 // Only process messages starting with start bytes
