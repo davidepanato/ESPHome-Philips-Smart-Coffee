@@ -130,8 +130,6 @@ namespace esphome
         void PhilipsCoffeeMachine::dump_config()
         {
             ESP_LOGCONFIG(TAG, "Philips Coffee Machine");
-            display_uart_.check_uart_settings(115200, 1, uart::UART_CONFIG_PARITY_NONE, 8);
-            mainboard_uart_.check_uart_settings(115200, 1, uart::UART_CONFIG_PARITY_NONE, 8);
         }
 
     } // namespace philips_coffee_machine

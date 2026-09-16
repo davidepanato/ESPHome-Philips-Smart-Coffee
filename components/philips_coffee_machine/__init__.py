@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import pins
+from esphome.components import uart
 from esphome.components.uart import UARTComponent
 from esphome.const import CONF_ID
 
@@ -58,6 +59,24 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_LANGUAGE, default="en-US"): cv.enum(LANGUAGES, space="-"),
     }
 ).extend(cv.COMPONENT_SCHEMA)
+
+
+def _uart_final_validate_schema(uart_bus):
+    return uart.final_validate_device_schema(
+        "philips_coffee_machine",
+        uart_bus=uart_bus,
+        baud_rate=115200,
+        require_tx=True,
+        require_rx=True,
+        parity="NONE",
+        stop_bits=1,
+    )
+
+
+FINAL_VALIDATE_SCHEMA = cv.All(
+    _uart_final_validate_schema(DISPLAY_UART_ID),
+    _uart_final_validate_schema(MAINBOARD_UART_ID),
+)
 
 
 def to_code(config):
