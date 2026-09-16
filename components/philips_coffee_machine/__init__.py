@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import pins
+from esphome.components import uart
 from esphome.components.uart import UARTComponent
 from esphome.const import CONF_ID
 
@@ -15,14 +16,31 @@ POWER_TRIP_DELAY = "power_trip_delay"
 CONF_POWER_MESSAGE_REPETITIONS = "power_message_repetitions"
 
 CONF_COMMAND_SET = "model"
-COMMAND_SETS = {"EP_2220": "PHILIPS_EP2220"}
+COMMAND_SETS = {
+    "EP_2220": "PHILIPS_EP2220",
+    "EP_2235": "PHILIPS_EP2235",
+    "EP_3243": "PHILIPS_EP3243",
+    # Note that the EP3243 and EP3246 are identical except for cosmetic differences
+    "EP_3246": "PHILIPS_EP3243",
+}
 
-philips_series_2200_ns = cg.esphome_ns.namespace("philips_series_2200")
-PhilipsSeries2200 = philips_series_2200_ns.class_("PhilipsSeries2200", cg.Component)
+CONF_LANGUAGE = "language"
+# Using IETF BCP 47 language tags (RFC 5646)
+LANGUAGES = {
+    "en-US": "PHILIPS_COFFEE_LANG_en_US",
+    "de-DE": "PHILIPS_COFFEE_LANG_de_DE",
+    "it-IT": "PHILIPS_COFFEE_LANG_it_IT",
+    "hu-HU": "PHILIPS_COFFEE_LANG_hu_HU",
+}
+
+philips_coffee_machine_ns = cg.esphome_ns.namespace("philips_coffee_machine")
+PhilipsCoffeeMachine = philips_coffee_machine_ns.class_(
+    "PhilipsCoffeeMachine", cg.Component
+)
 
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(): cv.declare_id(PhilipsSeries2200),
+        cv.GenerateID(): cv.declare_id(PhilipsCoffeeMachine),
         cv.Required(DISPLAY_UART_ID): cv.use_id(UARTComponent),
         cv.Required(MAINBOARD_UART_ID): cv.use_id(UARTComponent),
         cv.Required(POWER_PIN): pins.gpio_output_pin_schema,
@@ -38,13 +56,33 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_COMMAND_SET, default="EP_2220"): cv.enum(
             COMMAND_SETS, upper=True, space="_"
         ),
+        cv.Optional(CONF_LANGUAGE, default="en-US"): cv.enum(LANGUAGES, space="-"),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
 
+def _uart_final_validate_schema(uart_bus):
+    return uart.final_validate_device_schema(
+        "philips_coffee_machine",
+        uart_bus=uart_bus,
+        baud_rate=115200,
+        require_tx=True,
+        require_rx=True,
+        parity="NONE",
+        stop_bits=1,
+    )
+
+
+FINAL_VALIDATE_SCHEMA = cv.All(
+    _uart_final_validate_schema(DISPLAY_UART_ID),
+    _uart_final_validate_schema(MAINBOARD_UART_ID),
+)
+
+
 def to_code(config):
     # Use user-specified command set, default to EP_2200
-    cg.add_define(config[CONF_COMMAND_SET])
+    cg.add_define(COMMAND_SETS[config[CONF_COMMAND_SET]])
+    cg.add_define(LANGUAGES[config[CONF_LANGUAGE]])
 
     var = cg.new_Pvariable(config[CONF_ID])
     yield cg.register_component(var, config)

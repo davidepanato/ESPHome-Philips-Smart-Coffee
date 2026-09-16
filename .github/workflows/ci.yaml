@@ -32,12 +32,12 @@ jobs:
       matrix:
         include:
           - id: test
-            file: tests/full.yaml
-            name: Test tests/full.yaml
+            file: tests/full*.yaml
+            name: Test tests/full
             pio_cache_key: full
           - id: test
-            file: tests/base.yaml
-            name: Test tests/base.yaml
+            file: tests/base*.yaml
+            name: Test tests/base
             pio_cache_key: base
           - id: clang-format
             name: Run clang-format
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-python@v4
         id: python
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Cache virtualenv
         uses: actions/cache@v3

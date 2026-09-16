@@ -9,10 +9,9 @@
 #define POWER_TRIP_RETRY_DELAY 500
 #define MAX_POWER_TRIP_COUNT 5
 
-
 namespace esphome
 {
-    namespace philips_series_2200
+    namespace philips_coffee_machine
     {
         namespace philips_power_switch
         {
@@ -120,5 +119,5 @@ namespace esphome
             };
 
         } // namespace philips_power_switch
-    }     // namespace philips_series_2200
+    }     // namespace philips_coffee_machine
 } // namespace esphome

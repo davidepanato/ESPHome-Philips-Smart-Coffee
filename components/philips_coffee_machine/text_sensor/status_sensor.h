@@ -4,14 +4,15 @@
 #include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/uart/uart.h"
 #include "../commands.h"
+#include "../localization.h"
 
 // Feel free to lower this, you might get some invalid intermittent state though
-#define REPEAT_REQUIREMENT 30
+#define REPEAT_REQUIREMENT 60
 #define BLINK_THRESHOLD 750
 
 namespace esphome
 {
-    namespace philips_series_2200
+    namespace philips_coffee_machine
     {
         namespace philips_status_sensor
         {
@@ -27,26 +28,18 @@ namespace esphome
 
                 /**
                  * @brief Updates the status of this sensor based on the messages sent by the mainboard
+                 * @param data incoming data from the motherboard (19 bytes)
                  */
-                void update_status(uint8_t *data, size_t len);
+                void update_status(uint8_t *data);
 
                 /**
                  * @brief Sets the status to Off
                  */
                 void set_state_off()
                 {
-                    if (state != "Off")
-                        publish_state("Off");
+                    if (state != state_off)
+                        publish_state(state_off);
                 };
-
-                /**
-                 * @brief set the cappuccino flag which indicates if cappuccino is reported instead of steam
-                 *
-                 */
-                void set_use_cappuccino(bool value)
-                {
-                    use_cappuccino_ = value;
-                }
 
                 /**
                  * @brief Published the state if it's different form the currently published state.
@@ -78,17 +71,17 @@ namespace esphome
                 int new_state_counter_ = 0;
 
                 /// @brief cache for counting new messages
-                std::string new_state_ = "";
+                std::string new_state_ = state_unknown;
 
                 /// @brief status of the play/pause led
                 bool play_pause_led_ = false;
 
-                /// @brief indicates if cappuccino should be reported instead of steam
-                bool use_cappuccino_ = false;
-
                 /// @brief time of play/pause change
                 uint32_t play_pause_last_change_ = 0;
+
+                /// @brief time of the last enable size led change
+                uint32_t show_size_led_last_change_ = 0;
             };
         } // namespace philips_status_sensor
-    }     // namespace philips_series_2200
+    }     // namespace philips_coffee_machine
 } // namespace esphome

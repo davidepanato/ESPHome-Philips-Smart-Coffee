@@ -3,7 +3,7 @@
 
 namespace esphome
 {
-    namespace philips_series_2200
+    namespace philips_coffee_machine
     {
         namespace philips_power_switch
         {
@@ -39,23 +39,19 @@ namespace esphome
             {
                 if (state)
                 {
-                    ESP_LOGE(TAG, "ON!");
                     // Send pre-power on message
                     for (unsigned int i = 0; i <= power_message_repetitions_; i++)
                         mainboard_uart_->write_array(command_pre_power_on);
 
-                    ESP_LOGE(TAG, "POWER - MESSAGES SENT");
                     // Send power on message
                     if (cleaning_)
                     {
-                        ESP_LOGE(TAG, "CLEANING!");
                         // Send power on command with cleaning
                         for (unsigned int i = 0; i <= power_message_repetitions_; i++)
                             mainboard_uart_->write_array(command_power_with_cleaning);
                     }
                     else
                     {
-                        ESP_LOGE(TAG, "NO CLEANING!");
                         // Send power on command without cleaning
                         for (unsigned int i = 0; i <= power_message_repetitions_; i++)
                             mainboard_uart_->write_array(command_power_without_cleaning);
@@ -69,7 +65,6 @@ namespace esphome
                 }
                 else
                 {
-                    ESP_LOGE(TAG, "OFF!");
                     // Send power off message
                     for (unsigned int i = 0; i <= power_message_repetitions_; i++)
                         mainboard_uart_->write_array(command_power_off);
@@ -81,7 +76,7 @@ namespace esphome
 
             void Power::dump_config()
             {
-                ESP_LOGCONFIG(TAG, "Philips Series 2200 Power Switch");
+                ESP_LOGCONFIG(TAG, "Philips Coffee Machine Power Switch");
             }
 
             void Power::update_state(bool state)
@@ -101,5 +96,5 @@ namespace esphome
             }
 
         } // namespace philips_power_switch
-    }     // namespace philips_series_2200
+    }     // namespace philips_coffee_machine
 } // namespace esphome
