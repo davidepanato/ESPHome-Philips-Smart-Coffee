@@ -74,12 +74,10 @@ namespace esphome
 
                 if (size >= MAINBOARD_BUFFER_SIZE - 2)
                 {
-                    // Only process messages starting with start bytes
-                    // Only process duplicate messages (crude checksum alternative)
-                    // TODO: figure out how the checksum is calculated and only parse valid messages
+                    // Only process messages starting with start bytes and carrying a valid checksum
                     if (mainboard_buffer[0] == message_header[0] &&
                         mainboard_buffer[1] == message_header[1] &&
-                        std::equal(mainboard_buffer + 17, mainboard_buffer + 19, std::begin(last_mainboard_message_checksum_)))
+                        verify_checksum(mainboard_buffer, MAINBOARD_BUFFER_SIZE))
                     {
                         last_message_from_mainboard_time_ = millis();
 #ifdef USE_TEXT_SENSOR
@@ -94,8 +92,6 @@ namespace esphome
 #endif
 #endif
                     }
-                    // retain last checksum for comparison with next checksum
-                    std::copy_n(mainboard_buffer + 17, 2, last_mainboard_message_checksum_);
                 }
             }
 
