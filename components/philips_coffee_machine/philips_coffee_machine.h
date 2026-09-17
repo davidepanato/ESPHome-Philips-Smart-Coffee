@@ -31,6 +31,13 @@ namespace esphome
             void dump_config() override;
 
             /**
+             * @brief power_pin_ directly drives the display's power-trip transistor, which this
+             * hardware is designed to react to transitions on. Claim and drive it to a defined
+             * level as early as possible after reset to minimize the window where it floats.
+             */
+            float get_setup_priority() const override { return setup_priority::HARDWARE; }
+
+            /**
              * @brief Set the reference to the uart port connected to the display
              *
              * @param uart display uart reference
